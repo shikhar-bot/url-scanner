@@ -1,0 +1,19 @@
+{
+  "cSpell.words": [
+    "aiosqlite",
+    "asyncio",
+    "asyncpg",
+    "beautifulsoup",
+    "builtwith",
+    "dotenv",
+    "fastapi",
+    "httpx",
+    "passlib",
+    "pydantic",
+    "pytest",
+    "sessionmaker",
+    "setex",
+    "sqlalchemy",
+    "uvicorn"
+  ]
+}
