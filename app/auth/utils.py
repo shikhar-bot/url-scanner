@@ -3,20 +3,28 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from app.config import settings
 
-# Password hashing setup
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Force passlib to use bcrypt without the strict length check
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+    bcrypt__rounds=12,
+    bcrypt__ident="2b",
+)
 
 
 def hash_password(password: str) -> str:
     """Convert plain password to hashed version for DB storage."""
-    password = password[:72]
-    return pwd_context.hash(password)
+    # Encode to bytes and truncate to 72 bytes manually before hashing
+    password_bytes = password.encode("utf-8")[:72]
+    password_truncated = password_bytes.decode("utf-8", errors="ignore")
+    return pwd_context.hash(password_truncated)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Check if plain password matches the stored hash."""
-    plain_password = plain_password[:72]
-    return pwd_context.verify(plain_password, hashed_password)
+    password_bytes = plain_password.encode("utf-8")[:72]
+    password_truncated = password_bytes.decode("utf-8", errors="ignore")
+    return pwd_context.verify(password_truncated, hashed_password)
 
 
 def create_access_token(data: dict) -> str:
