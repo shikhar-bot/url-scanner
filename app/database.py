@@ -27,5 +27,6 @@ async def init_db():
     """Create all tables on startup."""
     async with engine.begin() as conn:
         from app import models #noqa
+        from app.auth import models as auth_models #noqa
         await conn.run_sync(Base.metadata.create_all)
 

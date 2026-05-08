@@ -8,13 +8,16 @@ from app.models import ScanResult
 from app.schemas import ScanRequest, ScanResultResponse, ScanResultSummary
 from app.services import fetch_url_details
 from app.cache import get_cached_result, set_cached_result, invalidate_cache, close_redis
+from app.auth.router import router as auth_router
 
 # App Creation - FastAPI Application
 app = FastAPI(
     title="URL Scanner",
-    description="Submit URL to scan their headers, title, status, and tech stacks.",
+    description="Submit URLs to scan their headers, title, status, and tech stacks.",
     version="1.0.0",
 )
+
+app.include_router(auth_router)
 
 # ── Lifecycle ─────────────────────────────────────────
 
