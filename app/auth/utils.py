@@ -1,30 +1,23 @@
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import bcrypt
 from app.config import settings
-
-# Force passlib to use bcrypt without the strict length check
-pwd_context = CryptContext(
-    schemes=["bcrypt"],
-    deprecated="auto",
-    bcrypt__rounds=12,
-    bcrypt__ident="2b",
-)
 
 
 def hash_password(password: str) -> str:
     """Convert plain password to hashed version for DB storage."""
-    # Encode to bytes and truncate to 72 bytes manually before hashing
-    password_bytes = password.encode("utf-8")[:72]
-    password_truncated = password_bytes.decode("utf-8", errors="ignore")
-    return pwd_context.hash(password_truncated)
+    password_bytes = password.encode("utf-8")
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password_bytes, salt)
+    return hashed.decode("utf-8")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Check if plain password matches the stored hash."""
-    password_bytes = plain_password.encode("utf-8")[:72]
-    password_truncated = password_bytes.decode("utf-8", errors="ignore")
-    return pwd_context.verify(password_truncated, hashed_password)
+    return bcrypt.checkpw(
+        plain_password.encode("utf-8"),
+        hashed_password.encode("utf-8")
+    )
 
 
 def create_access_token(data: dict) -> str:
