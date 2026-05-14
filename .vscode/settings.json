@@ -3,10 +3,12 @@
     "aiosqlite",
     "asyncio",
     "asyncpg",
+    "autouse",
     "beautifulsoup",
     "builtwith",
     "checkpw",
     "dotenv",
+    "faketoken",
     "fastapi",
     "gensalt",
     "hashpw",
@@ -17,6 +19,7 @@
     "sessionmaker",
     "setex",
     "sqlalchemy",
-    "uvicorn"
+    "uvicorn",
+    "wrongpassword"
   ]
 }
